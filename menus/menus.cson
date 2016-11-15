@@ -1,0 +1,18 @@
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Pane Browser'
+      'submenu': [
+        {
+          'label': 'Open',
+          'command': 'Pane Browser: Open'
+        }
+        {
+          'label': 'Open from clipboard',
+          'command': 'Pane Browser: Open from clipboard'
+        }
+      ]
+    ]
+  }
+]

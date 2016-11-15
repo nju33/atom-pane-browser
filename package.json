@@ -1,0 +1,19 @@
+{
+  "name": "pane-browser",
+  "version": "0.0.0",
+  "description": "A web browser in Atom",
+  "main": "./lib/pane-browser",
+  "repository": "https://github.com/nju33/atom-pane-browser",
+  "license": "MIT",
+  "readme": "README.md",
+  "keywords": [
+    "browser",
+    "pane",
+    "webview"
+  ],
+  "engines": {
+    "atom": "*"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
