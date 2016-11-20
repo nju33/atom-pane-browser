@@ -42,7 +42,7 @@ module.exports =
       @subscription.add @pane.onDidAddItem pane
 
       idx = @pane.getFreeIndex()
-      filePath = path.resolve __dirname, "../dummy/atom-browse-pane#{idx}"
+      filePath = path.resolve __dirname, "../dummy/atom-pane-browser#{idx}"
       atom.workspace.open filePath
       .then (textEditor) =>
         @subscription.add @pane.onWillDestroy pane

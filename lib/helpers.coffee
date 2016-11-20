@@ -1,2 +1,2 @@
 exports.isDummy = (title) ->
-  /^atom-browse-pane/.test title
+  /^atom-pane-browser/.test title
