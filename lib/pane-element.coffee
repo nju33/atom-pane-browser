@@ -2,9 +2,14 @@ paneBrowser = require './pane-browser-element'
 
 module.exports = class PaneElement
   constructor: ->
-    @minifyZoomLevel = atom.config.get 'pane-browser.minifyZoomLevel'
+    @config =
+      minifyZoomLevel: atom.config.get 'pane-browser.minifyZoomLevel'
+      ua: atom.config.get 'pane-browser.ua'
+
     atom.config.onDidChange 'pane-browser.minifyZoomLevel', (val) =>
-      @minifyZoomLevel = val
+      @config.minifyZoomLevel = val
+    atom.config.onDidChange 'pane-browser.ua', (val) =>
+      @config.ua = val
 
   create: ({textEditor, clipboard}) ->
     element = @createRoot [
@@ -13,7 +18,8 @@ module.exports = class PaneElement
         @createForwardBtn()
         @createReloadBtn()
         @createOmni()
-        @createGlass()
+        @createGlassBtn()
+        @createUABtn()
         @createDevtoolBtn()
       ]
       @createWebview textEditor, clipboard
@@ -59,11 +65,16 @@ module.exports = class PaneElement
     @omni.className = 'atom-pane-browser__omni native-key-bindings'
     @omni
 
-  createGlass: ->
+  createGlassBtn: ->
     @glass = document.createElement 'div'
     @glass.innerHTML = '<span class="atom-pane-browser__glass-inner"></span>'
     @glass.className = 'atom-pane-browser__glass--minify'
     @glass
+
+  createUABtn: ->
+    @ua = document.createElement 'div'
+    @ua.className = 'atom-pane-browser__ua--sp'
+    @ua
 
   createDevtoolBtn: ->
     @devtool = document.createElement 'div'
@@ -158,13 +169,29 @@ module.exports = class PaneElement
 
     handleGlass = (e) =>
       if @glass.classList.contains 'atom-pane-browser__glass--minify'
-        @webview.setZoomFactor 0.7
+        @webview.setZoomFactor @config.minifyZoomLevel
         @glass.className = 'atom-pane-browser__glass--magnify'
       else
         @webview.setZoomFactor 1
         @glass.className = 'atom-pane-browser__glass--minify'
     @glass.addEventListener 'click', handleGlass
     removeEventListeners.push @glass.removeEventListener.bind @glass, 'click', handleGlass
+
+    defaultUA = null
+    handleUA = do =>
+      handler = (e) =>
+        if @ua.classList.contains 'atom-pane-browser__ua--sp'
+          defaultUA = @webview.getUserAgent() unless defaultUA?
+          @webview.setUserAgent @config.ua
+          @webview.reload()
+          @ua.className = 'atom-pane-browser__ua--lt'
+        else
+          @webview.setUserAgent defaultUA
+          @webview.reload()
+          @ua.className = 'atom-pane-browser__ua--sp'
+      handler.bind @
+    @ua.addEventListener 'click', handleUA
+    removeEventListeners.push @ua.removeEventListener.bind @ua, 'click', handleUA
 
     handleDevtoolClick = (e) => @webview.openDevTools()
     @devtool.addEventListener 'click', handleDevtoolClick

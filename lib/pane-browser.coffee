@@ -9,9 +9,13 @@ module.exports =
     minifyZoomLevel:
       type: 'number'
       title: 'Minify zoom level'
-      defualt: 0.7
+      default: 0.7
       minimum: 0.1
-      maximum: 2.0
+      maximum: 1.0
+    ua:
+      type: 'string'
+      title: 'User agent'
+      default: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
 
   activate: (state) ->
     @subscription = new CompositeDisposable()
