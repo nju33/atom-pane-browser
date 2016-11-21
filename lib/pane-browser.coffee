@@ -5,6 +5,14 @@ Pane = require './pane'
 {isDummy} = require './helpers'
 
 module.exports =
+  config:
+    minifyZoomLevel:
+      type: 'number'
+      title: 'Minify zoom level'
+      defualt: 0.7
+      minimum: 0.1
+      maximum: 2.0
+
   activate: (state) ->
     @subscription = new CompositeDisposable()
     @subscription.add atom.commands.add 'atom-workspace',

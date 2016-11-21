@@ -81,7 +81,8 @@
   margin-left: 4px;
   margin-right: .5rem;
   margin-top: 11px;
-  width: 15px;
+  max-width: 15px;
+  min-width: 15px;
   height: 12px;
   border-radius: 50%;
   border-top: solid 1px currentColor;
@@ -129,6 +130,64 @@
     bottom: 2px;
     width: 4px;
     height: 1px;
+  }
+}
+
+.atom-pane-browser__glass() {
+  ._atom-pane-browser__btn;
+  color: @color;
+  margin-top: 11.5px;
+  margin-left: 3px;
+  margin-right: 8px;
+  padding: 3px;
+  max-width: 11.5px;
+  min-width: 11.5px;
+  height: 11.5px;
+  border: solid 1px currentColor;
+  border-radius: 50%;
+  transform: rotate(-45deg);
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 9px;
+    left: 3px;
+    height: 5px;
+    width: 1.5px;
+    background-color: currentColor;
+  }
+}
+
+.atom-pane-browser__glass--minify {
+  .atom-pane-browser__glass;
+
+  & .atom-pane-browser__glass-inner {
+    position: absolute;
+    left: 2.5px;
+    top: 2.5px;
+    transform: rotate(45deg);
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 1.3px;
+      background-color: currentColor;
+      // transition: .2s @easing;
+    }
+  }
+}
+
+.atom-pane-browser__glass--magnify {
+  .atom-pane-browser__glass--minify;
+  & .atom-pane-browser__glass-inner {
+    &:after {
+      left: -1px;
+      top: -1px;
+      transform: rotate(90deg);
+      transform-origin: center center;
+    }
   }
 }
 
