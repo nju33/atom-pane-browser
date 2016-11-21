@@ -48,16 +48,19 @@ module.exports = class PaneElement
   createBackBtn: ->
     @back = document.createElement 'div'
     @back.className = 'atom-pane-browser__back-btn atom-pane-browser__btn--disabled'
+    @back.setAttribute 'title', 'Go back'
     @back
 
   createForwardBtn: ->
     @forward = document.createElement 'div'
     @forward.className = 'atom-pane-browser__forward-btn atom-pane-browser__btn--disabled'
+    @forward.setAttribute 'title', 'Go forward'
     @forward
 
   createReloadBtn: ->
     @reload = document.createElement 'div'
     @reload.className = 'atom-pane-browser__reload-btn'
+    @reload.setAttribute 'title', 'Reload this pane'
     @reload
 
   createOmni: ->
@@ -69,16 +72,19 @@ module.exports = class PaneElement
     @glass = document.createElement 'div'
     @glass.innerHTML = '<span class="atom-pane-browser__glass-inner"></span>'
     @glass.className = 'atom-pane-browser__glass--minify'
+    @glass.setAttribute 'title', 'Minify zoom'
     @glass
 
   createUABtn: ->
     @ua = document.createElement 'div'
     @ua.className = 'atom-pane-browser__ua--sp'
+    @ua.setAttribute 'title', 'Set user-agent'
     @ua
 
   createDevtoolBtn: ->
     @devtool = document.createElement 'div'
     @devtool.className = 'atom-pane-browser__devtool-btn'
+    @devtool.setAttribute 'title', 'Open the devtool'
     @devtool
 
   createWebview: (textEditor, clipboard) ->
@@ -171,9 +177,11 @@ module.exports = class PaneElement
       if @glass.classList.contains 'atom-pane-browser__glass--minify'
         @webview.setZoomFactor @config.minifyZoomLevel
         @glass.className = 'atom-pane-browser__glass--magnify'
+        @glass.setAttribute 'title', 'Magnify zoom'
       else
         @webview.setZoomFactor 1
         @glass.className = 'atom-pane-browser__glass--minify'
+        @glass.setAttribute 'title', 'Minify zoom'
     @glass.addEventListener 'click', handleGlass
     removeEventListeners.push @glass.removeEventListener.bind @glass, 'click', handleGlass
 
@@ -185,10 +193,12 @@ module.exports = class PaneElement
           @webview.setUserAgent @config.ua
           @webview.reload()
           @ua.className = 'atom-pane-browser__ua--lt'
+          @ua.setAttribute 'title', 'Reset user-agent'
         else
           @webview.setUserAgent defaultUA
           @webview.reload()
           @ua.className = 'atom-pane-browser__ua--sp'
+          @ua.setAttribute 'title', 'Set user-agent'
       handler.bind @
     @ua.addEventListener 'click', handleUA
     removeEventListeners.push @ua.removeEventListener.bind @ua, 'click', handleUA
