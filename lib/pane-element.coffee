@@ -1,7 +1,19 @@
 paneBrowser = require './pane-browser-element'
 
 module.exports = class PaneElement
-  constructor: ->
+  constructor: ({path, textEditor, clipboard}) ->
+    @textEditor = textEditor
+    @clipboard = clipboard
+
+    @state = do =>
+      text = @textEditor.getText()
+      try
+        JSON.parse text
+      catch err
+        path: path
+        url: 'https://www.google.com/'
+        ua: false
+
     @config =
       minifyZoomLevel: atom.config.get 'pane-browser.minifyZoomLevel'
       ua: atom.config.get 'pane-browser.ua'
@@ -11,7 +23,7 @@ module.exports = class PaneElement
     atom.config.onDidChange 'pane-browser.ua', (val) =>
       @config.ua = val
 
-  create: ({textEditor, clipboard}) ->
+  create: () ->
     element = @createRoot [
       @createMenu [
         @createBackBtn()
@@ -22,10 +34,10 @@ module.exports = class PaneElement
         @createUABtn()
         @createDevtoolBtn()
       ]
-      @createWebview textEditor, clipboard
+      @createWebview()
     ]
 
-    removeEventListeners = @eventListener textEditor
+    removeEventListeners = @eventListener()
     @removeAllEventListener = ->
       rel() for rel in removeEventListeners
 
@@ -87,17 +99,18 @@ module.exports = class PaneElement
     @devtool.setAttribute 'title', 'Open the devtool'
     @devtool
 
-  createWebview: (textEditor, clipboard) ->
+  createWebview: () ->
     @webview = document.createElement('webview');
     @webview.className = 'atom-pane-browser__webview native-key-bindings'
-    @webview.src = clipboard && @getClipboardTextAndAdjust(clipboard) ||
-                   textEditor.getText() ||
-                   'https://www.google.com/'
+    @webview.style.visibility = 'hidden'
+    @webview.src = (@clipboard && @getClipboardTextAndAdjust clipboard) ||
+                   @state.url
     @webview.style.height = 'calc(100% - 38px)'
+
     @webview
 
-  getClipboardTextAndAdjust: (clipboard) ->
-    false unless clipboard
+  getClipboardTextAndAdjust: ->
+    false unless @clipboard
 
     text = atom.clipboard.read()
     @adjustOmniText text
@@ -113,28 +126,39 @@ module.exports = class PaneElement
     else
       "https://www.google.com/search?q=#{text}"
 
-  eventListener: (textEditor) ->
+  eventListener: ->
     removeEventListeners = []
 
-    handleDomReady = =>
-      url = @webview.getURL()
-      if /http:\/\//.test url
-        url = url.replace /http:\/\//, ''
-      @omni.value = url
+    handleDomReady = do =>
+      init = false
+      =>
+        url = @webview.getURL()
+        if /http:\/\//.test url
+          url = url.replace /http:\/\//, ''
+        @omni.value = url
+        @state.url = url
+        @saveState()
 
-      textEditor.deleteLine()
-      textEditor.setText url
-      textEditor.save()
+        if @webview.canGoBack()
+          @back.className = 'atom-pane-browser__back-btn'
+        else
+          @back.className = 'atom-pane-browser__back-btn atom-pane-browser__btn--disabled'
 
-      if @webview.canGoBack()
-        @back.className = 'atom-pane-browser__back-btn'
-      else
-        @back.className = 'atom-pane-browser__back-btn atom-pane-browser__btn--disabled'
+        if @webview.canGoForward()
+          @forward.className = 'atom-pane-browser__forward-btn'
+        else
+          @forward.className = 'atom-pane-browser__forward-btn atom-pane-browser__btn--disabled'
 
-      if @webview.canGoForward()
-        @forward.className = 'atom-pane-browser__forward-btn'
-      else
-        @forward.className = 'atom-pane-browser__forward-btn atom-pane-browser__btn--disabled'
+        if not init and @state.ua
+          @webview.setUserAgent @config.ua
+          @webview.reload()
+          @ua.className = 'atom-pane-browser__ua--lt'
+          @ua.setAttribute 'title', 'Reset user-agent'
+
+        unless init
+          @webview.style.visibility = 'visible'
+          init = true
+
     @webview.addEventListener 'dom-ready', handleDomReady
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'dom-ready', handleDomReady
 
@@ -185,20 +209,22 @@ module.exports = class PaneElement
     @glass.addEventListener 'click', handleGlass
     removeEventListeners.push @glass.removeEventListener.bind @glass, 'click', handleGlass
 
-    defaultUA = null
     handleUA = do =>
       handler = (e) =>
         if @ua.classList.contains 'atom-pane-browser__ua--sp'
-          defaultUA = @webview.getUserAgent() unless defaultUA?
+          @state.ua = true
           @webview.setUserAgent @config.ua
           @webview.reload()
           @ua.className = 'atom-pane-browser__ua--lt'
           @ua.setAttribute 'title', 'Reset user-agent'
         else
-          @webview.setUserAgent defaultUA
+          @state.ua = false
+          @webview.setUserAgent ''
           @webview.reload()
           @ua.className = 'atom-pane-browser__ua--sp'
           @ua.setAttribute 'title', 'Set user-agent'
+        @saveState()
+
       handler.bind @
     @ua.addEventListener 'click', handleUA
     removeEventListeners.push @ua.removeEventListener.bind @ua, 'click', handleUA
@@ -206,3 +232,9 @@ module.exports = class PaneElement
     handleDevtoolClick = (e) => @webview.openDevTools()
     @devtool.addEventListener 'click', handleDevtoolClick
     removeEventListeners.push @devtool.removeEventListener.bind @devtool, 'click', handleDevtoolClick
+
+  saveState: ->
+    @textEditor.deleteLine()
+    try
+      @textEditor.setText JSON.stringify @state
+      @textEditor.save()

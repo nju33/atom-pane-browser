@@ -1,3 +1,4 @@
+fs = require 'fs'
 {isDummy} = require './helpers'
 
 module.exports = class Pane
@@ -21,10 +22,21 @@ module.exports = class Pane
     @usedIndex = []
 
   getFreeIndex: ->
-    for i in [0..22]
-      if i not in @usedIndex
-        break
+    projectPath = (atom.project.getPaths() || [''])[0]
 
+    for i in [0..30]
+      filePath = path.resolve __dirname, "../dummy/atom-pane-browser#{i}"
+      raw = fs.readFileSync filePath, 'utf-8'
+      data = do ->
+        try
+          JSON.parse raw
+        catch err
+          null
+
+      if (not data? or data.path is projectPath) and
+         i not in @usedIndex
+        break
+        
     @usedIndex.push i
     i
 

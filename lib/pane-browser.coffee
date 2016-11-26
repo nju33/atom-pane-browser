@@ -29,6 +29,9 @@ module.exports =
 
     for pane in atom.workspace.getPanes()
       item = pane.activeItem
+      unless item?
+        continue
+
       if isDummy item.getTitle()
         @pane.add pane
         @subscription.add @pane.onDidAddItem pane
@@ -60,18 +63,20 @@ module.exports =
         textEditor.deleteLine()
         textEditor.save()
 
-        paneElement = new PaneElement()
-        @elements.push paneElement
-        @pane.activeElement.appendChild paneElement.create
+        paneElement = new PaneElement
+          path: (atom.project.getPaths() || [''])[0]
           textEditor: textEditor
           clipboard: opts.clipboard
+        @elements.push paneElement
+        @pane.activeElement.appendChild paneElement.create()
 
     else
       textEditor = @pane.activePaneTextEditor
       @pane.setIndex textEditor
 
-      paneElement = new PaneElement()
-      @elements.push paneElement
-      @pane.activeElement.appendChild paneElement.create
+      paneElement = new PaneElement
+        path: (atom.project.getPaths() || [''])[0]
         textEditor: textEditor
         clipboard: opts.clipboard
+      @elements.push paneElement
+      @pane.activeElement.appendChild paneElement.create()
