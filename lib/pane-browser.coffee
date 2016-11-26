@@ -1,3 +1,4 @@
+fs = require 'fs'
 path = require 'path'
 {CompositeDisposable} = require 'atom'
 PaneElement = require './pane-element'
@@ -21,8 +22,8 @@ module.exports =
     @subscription = new CompositeDisposable()
     @subscription.add atom.commands.add 'atom-workspace',
       'Pane Browser: Open': => @open()
-    @subscription.add atom.commands.add 'atom-workspace',
       'Pane Browser: Open from clipboard': => @open null, {clipboard: true}
+      'Pane Browser: Reset all state': => @resetAllState()
 
     @elements = []
     @pane = new Pane()
@@ -80,3 +81,9 @@ module.exports =
         clipboard: opts.clipboard
       @elements.push paneElement
       @pane.activeElement.appendChild paneElement.create()
+
+  resetAllState: ->
+    for i in [0..50]
+      do (_i = i) ->
+        filePath = path.resolve __dirname, "../dummy/atom-pane-browser#{_i}"
+        fs.writeFile filePath, '', 'utf-8'
