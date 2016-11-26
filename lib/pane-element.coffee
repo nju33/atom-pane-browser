@@ -108,7 +108,7 @@ module.exports = class PaneElement
     else if /^\d{4,}/.test text
       number = text.match(/(^\d{4,})/)[1]
       "http://localhost:#{number}"
-    else if /[^.]+\.[^.]/.test text
+    else if /[^.]+(?:\.[^.]|:\d{4})/.test text
       "http://#{text}"
     else
       "https://www.google.com/search?q=#{text}"
