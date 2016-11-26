@@ -28,14 +28,12 @@ module.exports =
     @pane = new Pane()
 
     for pane in atom.workspace.getPanes()
-      for item in pane.items
-        if isDummy item.getTitle()
-          @pane.add pane
-          @subscription.add @pane.onDidAddItem pane
-          @subscription.add @pane.onWillDestroy pane
-
-          @open pane
-          break
+      item = pane.activeItem
+      if isDummy item.getTitle()
+        @pane.add pane
+        @subscription.add @pane.onDidAddItem pane
+        @subscription.add @pane.onWillDestroy pane
+        @open pane
 
   deactivate: ->
     @subscription.dispose()
