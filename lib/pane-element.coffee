@@ -103,7 +103,7 @@ module.exports = class PaneElement
     @webview = document.createElement('webview');
     @webview.className = 'atom-pane-browser__webview native-key-bindings'
     @webview.style.visibility = 'hidden'
-    @webview.src = (@clipboard && @getClipboardTextAndAdjust clipboard) ||
+    @webview.src = (@clipboard && @getClipboardTextAndAdjust @clipboard) ||
                    @state.url
     @webview.style.height = 'calc(100% - 38px)'
 
