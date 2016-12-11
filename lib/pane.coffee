@@ -25,7 +25,7 @@ module.exports = class Pane
     projectPath = (atom.project.getPaths() || [''])[0]
 
     for i in [0..50]
-      filePath = path.resolve __dirname, "../dummy/atom-pane-browser#{i}"
+      filePath = require('path').resolve __dirname, "../dummy/atom-pane-browser#{i}"
       raw = fs.readFileSync filePath, 'utf-8'
       data = do ->
         try
