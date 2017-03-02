@@ -14,8 +14,9 @@
 
 .atom-pane-browser__menu {
   display: flex;
+  align-items: center;
   background-color: #21252b;
-  padding: 0 1rem 0 .5rem;
+  padding: 0 .2rem;
   border-bottom: 1px solid #181a1f;
 }
 
@@ -24,10 +25,37 @@
   position: relative;
   transition: color .2s @easing;
   cursor: pointer;
-  &:hover {
+
+  // ><
+  [data-menu-icon] {
+    position: relative;
+    top: -2px;
+    left: 3px;
+  }
+  // ><
+  &:hover,
+  &:hover [data-menu-icon] {
     color: @hoverColor;
   }
 }
+
+.atom-pane-browser__icon-wrapper {
+  .atom-pane-browser__btn;
+  height: 2.75em;
+  transition: .2s @easing;
+  padding: 0 .1em;
+  max-width: 2.75em;
+  min-width: 2.75em;
+  &:hover {
+    background: #3a3f4b;
+  }
+
+  &.atom-pane-browser__btn--disabled {
+    cursor: default !important;
+    background: transparent !important;
+  }
+}
+
 
 .atom-pane-browser__back-btn {
   .atom-pane-browser__btn;
@@ -197,9 +225,8 @@
 
 .atom-pane-browser__ua--sp {
   .atom-pane-browser__btn;
-  margin-left: 2px;
+  margin-left: 5px;
   margin-top: 9.5px;
-  margin-right: 8px;
   max-width: 12.5px;
   min-width: 12.5px;
   height: 17px;
@@ -230,7 +257,7 @@
 
 .atom-pane-browser__ua--lt {
   .atom-pane-browser__btn;
-  margin-left: 4px;
+  margin-left: 6px;
   margin-top: 12.5px;
   margin-right: 9px;
   max-width: 8.9px;

@@ -59,20 +59,32 @@ module.exports = class PaneElement
 
   createBackBtn: ->
     @back = document.createElement 'div'
-    @back.className = 'atom-pane-browser__back-btn atom-pane-browser__btn--disabled'
+    @back.className = 'atom-pane-browser__icon-wrapper'
     @back.setAttribute 'title', 'Go back'
+    @backIcon = document.createElement 'div'
+    @backIcon.className = 'atom-pane-browser__back-btn atom-pane-browser__btn--disabled'
+    @backIcon.dataset.menuIcon = true
+    @back.appendChild @backIcon
     @back
 
   createForwardBtn: ->
     @forward = document.createElement 'div'
-    @forward.className = 'atom-pane-browser__forward-btn atom-pane-browser__btn--disabled'
+    @forward.className = 'atom-pane-browser__icon-wrapper'
     @forward.setAttribute 'title', 'Go forward'
+    @forwardIcon = document.createElement 'div'
+    @forwardIcon.className = 'atom-pane-browser__forward-btn atom-pane-browser__btn--disabled'
+    @forwardIcon.dataset.menuIcon = true
+    @forward.appendChild @forwardIcon
     @forward
 
   createReloadBtn: ->
     @reload = document.createElement 'div'
-    @reload.className = 'atom-pane-browser__reload-btn'
+    @reload.className = 'atom-pane-browser__icon-wrapper'
     @reload.setAttribute 'title', 'Reload this pane'
+    @reloadIcon = document.createElement 'div'
+    @reloadIcon.className = 'atom-pane-browser__reload-btn'
+    @reloadIcon.dataset.menuIcon = true
+    @reload.appendChild @reloadIcon
     @reload
 
   createOmni: ->
@@ -82,21 +94,33 @@ module.exports = class PaneElement
 
   createGlassBtn: ->
     @glass = document.createElement 'div'
-    @glass.innerHTML = '<span class="atom-pane-browser__glass-inner"></span>'
-    @glass.className = 'atom-pane-browser__glass--minify'
+    @glass.className = 'atom-pane-browser__icon-wrapper'
     @glass.setAttribute 'title', 'Minify zoom'
+    @glassIcon = document.createElement 'div'
+    @glassIcon.innerHTML = '<span class="atom-pane-browser__glass-inner"></span>'
+    @glassIcon.className = 'atom-pane-browser__glass--minify'
+    @glassIcon.dataset.menuIcon = true
+    @glass.appendChild @glassIcon
     @glass
 
   createUABtn: ->
     @ua = document.createElement 'div'
-    @ua.className = 'atom-pane-browser__ua--sp'
+    @ua.className = 'atom-pane-browser__icon-wrapper'
     @ua.setAttribute 'title', 'Set user-agent'
+    @uaIcon = document.createElement 'div'
+    @uaIcon.className = 'atom-pane-browser__ua--sp'
+    @uaIcon.dataset.menuIcon = true
+    @ua.appendChild @uaIcon
     @ua
 
   createDevtoolBtn: ->
     @devtool = document.createElement 'div'
-    @devtool.className = 'atom-pane-browser__devtool-btn'
+    @devtool.className = 'atom-pane-browser__icon-wrapper'
     @devtool.setAttribute 'title', 'Open the devtool'
+    @devtoolIcon = document.createElement 'div'
+    @devtoolIcon.className = 'atom-pane-browser__devtool-btn'
+    @devtoolIcon.dataset.menuIcon = true
+    @devtool.appendChild @devtoolIcon
     @devtool
 
   createWebview: () ->
@@ -140,19 +164,27 @@ module.exports = class PaneElement
         @saveState()
 
         if @webview.canGoBack()
-          @back.className = 'atom-pane-browser__back-btn'
+          # @backIcon.className = 'atom-pane-browser__back-btn'
+          @back.classList.remove 'atom-pane-browser__btn--disabled'
+          @backIcon.classList.remove 'atom-pane-browser__btn--disabled'
         else
-          @back.className = 'atom-pane-browser__back-btn atom-pane-browser__btn--disabled'
+          # @backIcon.className = 'atom-pane-browser__back-btn atom-pane-browser__btn--disabled'
+          @back.classList.add 'atom-pane-browser__btn--disabled'
+          @backIcon.classList.add 'atom-pane-browser__btn--disabled'
 
         if @webview.canGoForward()
-          @forward.className = 'atom-pane-browser__forward-btn'
+          @forward.classList.remove 'atom-pane-browser__btn--disabled'
+          @forwardIcon.classList.remove 'atom-pane-browser__btn--disabled'
+          # @forwardIcon.className = 'atom-pane-browser__forward-btn'
         else
-          @forward.className = 'atom-pane-browser__forward-btn atom-pane-browser__btn--disabled'
+          @forward.classList.add 'atom-pane-browser__btn--disabled'
+          @forwardIcon.classList.add 'atom-pane-browser__btn--disabled'
+          # @forwardIcon.className = 'atom-pane-browser__forward-btn atom-pane-browser__btn--disabled'
 
         if not init and @state.ua
           @webview.setUserAgent @config.ua
           @webview.reload()
-          @ua.className = 'atom-pane-browser__ua--lt'
+          @uaIcon.className = 'atom-pane-browser__ua--lt'
           @ua.setAttribute 'title', 'Reset user-agent'
 
         unless init
@@ -198,30 +230,30 @@ module.exports = class PaneElement
     removeEventListeners.push @reload.removeEventListener.bind @reload, 'click', handleReloadClick
 
     handleGlass = (e) =>
-      if @glass.classList.contains 'atom-pane-browser__glass--minify'
+      if @glassIcon.classList.contains 'atom-pane-browser__glass--minify'
         @webview.setZoomFactor @config.minifyZoomLevel
-        @glass.className = 'atom-pane-browser__glass--magnify'
+        @glassIcon.className = 'atom-pane-browser__glass--magnify'
         @glass.setAttribute 'title', 'Magnify zoom'
       else
         @webview.setZoomFactor 1
-        @glass.className = 'atom-pane-browser__glass--minify'
+        @glassIcon.className = 'atom-pane-browser__glass--minify'
         @glass.setAttribute 'title', 'Minify zoom'
     @glass.addEventListener 'click', handleGlass
     removeEventListeners.push @glass.removeEventListener.bind @glass, 'click', handleGlass
 
     handleUA = do =>
       handler = (e) =>
-        if @ua.classList.contains 'atom-pane-browser__ua--sp'
+        if @uaIcon.classList.contains 'atom-pane-browser__ua--sp'
           @state.ua = true
           @webview.setUserAgent @config.ua
           @webview.reload()
-          @ua.className = 'atom-pane-browser__ua--lt'
+          @uaIcon.className = 'atom-pane-browser__ua--lt'
           @ua.setAttribute 'title', 'Reset user-agent'
         else
           @state.ua = false
           @webview.setUserAgent ''
           @webview.reload()
-          @ua.className = 'atom-pane-browser__ua--sp'
+          @uaIcon.className = 'atom-pane-browser__ua--sp'
           @ua.setAttribute 'title', 'Set user-agent'
         @saveState()
 
