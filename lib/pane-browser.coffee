@@ -31,6 +31,10 @@ module.exports =
         unless el.classList.contains 'atom-pane-browser__webview'
           return
         el.reload()
+    @subscription.add atom.commands.add '.atom-pane-browser__webview',
+      'Pane Browser: Capture': => @capturePage 1
+      'Pane Browser: Capture @2x': => @capturePage 2
+      'Pane Browser: Capture @3x': => @capturePage 3
 
     @elements = []
     @pane = new Pane()
@@ -88,6 +92,30 @@ module.exports =
         clipboard: opts.clipboard
       @elements.push paneElement
       @pane.activeElement.appendChild paneElement.create()
+
+  capturePage: (level) ->
+    el = document.activeElement
+    unless el.classList.contains 'atom-pane-browser__webview'
+      return
+
+    rect =
+      x: 0
+      y: 0
+      width: el.clientWidth * level
+      height: el.clientHeight * level
+
+    el.capturePage rect, (nativeImg) ->
+      picturesDirpath = electron.remote.app.getPath 'pictures'
+      dirname = path.resolve picturesDirpath, 'pane-browser'
+
+      try
+        fs.accessSync dirname, fs.constants.F_OK
+      catch err
+        fs.mkdirSync dirname
+
+      filepath = path.join dirname, "#{Date.now()}.png"
+      png = nativeImg.toPNG()
+      fs.writeFile filepath, png
 
   resetAllState: ->
     for i in [0..50]

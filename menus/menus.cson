@@ -12,6 +12,22 @@
           'label': 'Open from clipboard',
           'command': 'Pane Browser: Open from clipboard'
         }
+        {
+          'label': 'Reload page',
+          'command': 'Pane Browser: Reload'
+        }
+        {
+          'label': 'Capture page',
+          'command': 'Pane Browser: Capture'
+        }
+        {
+          'label': 'Capture page @2x',
+          'command': 'Pane Browser: Capture @2x'
+        }
+        {
+          'label': 'Capture page @3x',
+          'command': 'Pane Browser: Capture @3x'
+        }
       ]
     ]
   }
