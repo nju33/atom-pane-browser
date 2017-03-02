@@ -1,5 +1,6 @@
 fs = require 'fs'
 path = require 'path'
+electron = require 'electron'
 {CompositeDisposable} = require 'atom'
 PaneElement = require './pane-element'
 Pane = require './pane'
@@ -24,6 +25,12 @@ module.exports =
       'Pane Browser: Open': => @open()
       'Pane Browser: Open from clipboard': => @open null, {clipboard: true}
       'Pane Browser: Reset all state': => @resetAllState()
+    @subscription.add atom.commands.add '.atom-pane-browser__webview',
+      'Pane Browser: Reload': =>
+        el = document.activeElement
+        unless el.classList.contains 'atom-pane-browser__webview'
+          return
+        el.reload()
 
     @elements = []
     @pane = new Pane()
