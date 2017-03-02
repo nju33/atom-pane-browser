@@ -2,8 +2,10 @@
     'ctrl-alt-b': 'Pane Browser: Open'
     'ctrl-alt-c': 'Pane Browser: Open from clipboard'
 
-'.atom-pane-browser__webview':
+'.platform-darwin .atom-pane-browser__webview':
     'cmd-r': 'Pane Browser: Reload'
+'.platform-windows .atom-pane-browser__webview':
+    'ctrl-r': 'Pane Browser: Reload'
 
 # 'atom-web-view':
 #   'backspace': 'native!'

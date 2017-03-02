@@ -16,9 +16,16 @@ apm install pane-browser
 
 ## Keymaps
 
-```
+```cson
 'ctrl-alt-b': 'Pane Browser: Open'
 'ctrl-alt-c': 'Pane Browser: Open from clipboard'
+
+# mac
+'.platform-darwin .atom-pane-browser__webview':
+    'cmd-r': 'Pane Browser: Reload'
+# windows
+'.platform-windows .atom-pane-browser__webview':
+    'ctrl-r': 'Pane Browser: Reload'
 ```
 
 ## Commands
@@ -29,6 +36,14 @@ apm install pane-browser
   Open search results with clipboard contents
 - `Pane Browser: Reset all state`  
   Delete all holding state
+- `Pane Browser: Reload`
+  Reload the current page
+- `Pane Browser: Capture`  
+  Capture page
+- `Pane Browser: Capture @2x`  
+  Capture page (width x2, height x2)
+- `Pane Browser: Capture @3x`  
+  Capture page (width x3, height x3)
 
 ## Options
 
