@@ -140,7 +140,10 @@ module.exports = class PaneElement
     @adjustOmniText text
 
   adjustOmniText: (text) ->
-    if /https?:\/\//.test text
+    # for github
+    if /^(?:gh|github):\/\//.test text
+      text.replace /^(?:gh|github):\/\//, 'https://github.com/'
+    else if /https?:\/\//.test text
       text
     else if /^\d{4,}/.test text
       number = text.match(/(^\d{4,})/)[1]
@@ -201,15 +204,6 @@ module.exports = class PaneElement
     handleOmniKeydown = (e) =>
       if (e.keyCode is 13)
         @webview.loadURL @adjustOmniText e.target.value
-        # if /https?:\/\//.test uri
-        #   @webview.loadURL uri
-        # else if /^\d{4,}/.test uri
-        #   number = uri.match(/(^\d{4,})/)[1]
-        #   @webview.loadURL "http://localhost:#{number}"
-        # else if /[^.]+\.[^.]/.test uri
-        #   @webview.loadURL "http://#{uri}"
-        # else
-        #   @webview.loadURL "https://www.google.com/search?q=#{uri}"
     @omni.addEventListener 'keydown', handleOmniKeydown
     removeEventListeners.push @omni.removeEventListener.bind @omni, 'keydown', handleOmniKeydown
 
