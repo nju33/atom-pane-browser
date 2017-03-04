@@ -1,6 +1,26 @@
+@import (less) "nprogress.css";
+
 @color: #9da5b4;
 @hoverColor: #e2c08d;
 @easing: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+
+#nprogress {
+  .bar {
+    background: darken(saturate(@hoverColor, 20), 13);
+    height: .3em
+  }
+
+  .peg {
+    box-shadow:
+      0 0 .5em darken(saturate(@hoverColor, 20), 20),
+      0 0 .3em darken(saturate(@hoverColor, 20), 20);
+  }
+
+  .spinner-icon {
+    border-top-color: darken(saturate(@hoverColor, 20), 13);
+    border-left-color: darken(saturate(@hoverColor, 20), 13);
+  }
+}
 
 .atom-pane-browser__box {
   position: absolute;

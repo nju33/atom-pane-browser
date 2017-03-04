@@ -1,4 +1,5 @@
 paneBrowser = require './pane-browser-element'
+NProgress = require 'nprogress'
 
 module.exports = class PaneElement
   constructor: ({path, textEditor, clipboard}) ->
@@ -124,14 +125,18 @@ module.exports = class PaneElement
     @devtool
 
   createWebview: () ->
-    @webview = document.createElement('webview');
+    @webviewWrapper = document.createElement 'div'
+    @webviewWrapper.id = 'atom-pane-browser__webview-wrapper'
+    @webviewWrapper.style.height = 'calc(100% - 38px)'
+    @webview = document.createElement 'webview'
     @webview.className = 'atom-pane-browser__webview native-key-bindings'
     @webview.style.visibility = 'hidden'
     @webview.src = (@clipboard && @getClipboardTextAndAdjust @clipboard) ||
                    @state.url
-    @webview.style.height = 'calc(100% - 38px)'
+    @webview.style.height = '100%'
+    @webviewWrapper.appendChild @webview
 
-    @webview
+    @webviewWrapper
 
   getClipboardTextAndAdjust: ->
     false unless @clipboard
@@ -196,6 +201,19 @@ module.exports = class PaneElement
 
     @webview.addEventListener 'dom-ready', handleDomReady
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'dom-ready', handleDomReady
+
+    handleDidStartLoading = ->
+      NProgress.configure
+        parent: '.pane.active #atom-pane-browser__webview-wrapper'
+      try
+        NProgress.start()
+      catch err
+    @webview.addEventListener 'did-start-loading', handleDidStartLoading
+    removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-start-loading', handleDidStartLoading
+    handleDidStopLoading = ->
+      NProgress.done()
+    @webview.addEventListener 'did-stop-loading', handleDidStopLoading
+    removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-stop-loading', handleDidStopLoading
 
     handleOmniFocus = (e) -> e.target.select()
     @omni.addEventListener 'focus', handleOmniFocus
