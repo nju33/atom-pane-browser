@@ -45,6 +45,11 @@ apm install pane-browser
 - `Pane Browser: Capture @3x`  
   Capture page (width x3, height x3)
 
+## Scheme
+
+- `gh|github`
+  For example, `gh://nju33/atom-pane-browser` will be `https://github.com/nju33/atom-pane-browser`
+
 ## Options
 
 - `minify zoom level`, default: `0.7`  
