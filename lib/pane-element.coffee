@@ -228,11 +228,11 @@ module.exports = class PaneElement
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'dom-ready', handleDomReady
 
     handleDidStartLoading = ->
-      try
+      selector = '.pane.active #atom-pane-browser__webview-wrapper'
+      if document.querySelector selector
         NProgress.configure
           parent: '.pane.active #atom-pane-browser__webview-wrapper'
         NProgress.start()
-      catch err
     @webview.addEventListener 'did-start-loading', handleDidStartLoading
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-start-loading', handleDidStartLoading
     handleDidStopLoading = ->
