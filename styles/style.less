@@ -1,3 +1,4 @@
+@import "ui-variables";
 @import (less) "nprogress.css";
 
 @color: #9da5b4;
@@ -315,4 +316,25 @@
 
 .atom-pane-browser__webview {
   width: 100%;
+}
+
+.atom-pane-browser__error {
+  position: absolute;
+  top: 38px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: @base-background-color;
+  color: @text-color;
+}
+
+.atom-pane-browser__error-code {
+  font-size: 4em;
+}
+
+.atom-pane-browser__error-description {
+  font-size: 1.3em;
+  word-break: break-all;
 }

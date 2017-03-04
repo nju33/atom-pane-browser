@@ -19,6 +19,8 @@ module.exports = class PaneElement
       minifyZoomLevel: atom.config.get 'pane-browser.minifyZoomLevel'
       ua: atom.config.get 'pane-browser.ua'
 
+    @error = false
+
     atom.config.onDidChange 'pane-browser.minifyZoomLevel', (val) =>
       @config.minifyZoomLevel = val
     atom.config.onDidChange 'pane-browser.ua', (val) =>
@@ -36,6 +38,7 @@ module.exports = class PaneElement
         @createDevtoolBtn()
       ]
       @createWebview()
+      @createErrorElement()
     ]
 
     removeEventListeners = @eventListener()
@@ -138,6 +141,23 @@ module.exports = class PaneElement
 
     @webviewWrapper
 
+  createErrorElement: ->
+    @errorElement = document.createElement 'div'
+    @errorElement.classList = 'atom-pane-browser__error'
+    wrapper = document.createElement 'div'
+    wrapper.classList = 'atom-pane-browser__error-wrapper'
+    @errorElement.style.height = 'calc(100% - 38px)'
+    @errorElement.style.display = 'none'
+    @errorElementCode = document.createElement 'div'
+    @errorElementCode.classList = 'atom-pane-browser__error-code'
+    @errorElementDescription = document.createElement 'div'
+    @errorElementDescription.classList = 'atom-pane-browser__error-description'
+
+    wrapper.appendChild @errorElementCode
+    wrapper.appendChild @errorElementDescription
+    @errorElement.appendChild wrapper
+    @errorElement
+
   getClipboardTextAndAdjust: ->
     false unless @clipboard
 
@@ -164,6 +184,11 @@ module.exports = class PaneElement
     handleDomReady = do =>
       init = false
       =>
+        if @error
+          @errorElement.style.display = 'flex'
+        else
+          @errorElement.style.display = 'none'
+
         url = @webview.getURL()
         if /http:\/\//.test url
           url = url.replace /http:\/\//, ''
@@ -214,6 +239,18 @@ module.exports = class PaneElement
       NProgress.done()
     @webview.addEventListener 'did-stop-loading', handleDidStopLoading
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-stop-loading', handleDidStopLoading
+
+    handleDidFinishLoad = =>
+      @error = false
+    @webview.addEventListener 'did-finish-load', handleDidFinishLoad
+    removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-finish-load', handleDidFinishLoad
+
+    handleDidFailLoad = ({errorCode, errorDescription}) =>
+      @error = true
+      @errorElementCode.innerText = errorCode
+      @errorElementDescription.innerText = errorDescription
+    @webview.addEventListener 'did-fail-load', handleDidFailLoad
+    removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-stop-loading', handleDidFailLoad
 
     handleOmniFocus = (e) -> e.target.select()
     @omni.addEventListener 'focus', handleOmniFocus
