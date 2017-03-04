@@ -228,9 +228,9 @@ module.exports = class PaneElement
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'dom-ready', handleDomReady
 
     handleDidStartLoading = ->
-      NProgress.configure
-        parent: '.pane.active #atom-pane-browser__webview-wrapper'
       try
+        NProgress.configure
+          parent: '.pane.active #atom-pane-browser__webview-wrapper'
         NProgress.start()
       catch err
     @webview.addEventListener 'did-start-loading', handleDidStartLoading
@@ -317,5 +317,8 @@ module.exports = class PaneElement
   saveState: ->
     @textEditor.deleteLine()
     try
+      # 😡😡😡😡😡
+      if @state.url.startsWith 'file://'
+        return
       @textEditor.setText JSON.stringify @state
       @textEditor.save()
