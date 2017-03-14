@@ -32,3 +32,10 @@
     ]
   }
 ]
+'context-menu':
+  'atom-pane-browser': [
+    {label: 'Reload', command: 'Pane Browser: Reload'}
+    {label: 'Capture', command: 'Pane Browser: Capture'}
+    {label: 'Capture @2x', command: 'Pane Browser: Capture @2x'}
+    {label: 'Capture @3x', command: 'Pane Browser: Capture @3x'}
+  ]
