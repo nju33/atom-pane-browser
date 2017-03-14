@@ -2,37 +2,9 @@
     'ctrl-alt-b': 'Pane Browser: Open'
     'ctrl-alt-c': 'Pane Browser: Open from clipboard'
 
-'.platform-darwin .atom-pane-browser__webview':
+'.platform-darwin atom-pane atom-pane-browser':
     'cmd-r': 'Pane Browser: Reload'
-'.platform-windows .atom-pane-browser__webview':
+    'cmd-alt-i': 'Pane Browser: Open devtool'
+'.platform-windows atom-pane atom-pane-browser':
     'ctrl-r': 'Pane Browser: Reload'
-
-# 'atom-web-view':
-#   'backspace': 'native!'
-#
-# '.platform-darwin atom-web-view':
-#   'backspace': 'native!'
-
-# '.platform-darwin atom-web-view webview':
-#   'cmd-shift-c': 'webviewpane:runInspectServiceWorker'
-# '.platform-win32 atom-web-view webview':
-#   'ctrl-shift-c': 'webviewpane:runInspectServiceWorker'
-#
-# '.platform-darwin atom-web-view webview':
-#   'cmd-a': 'webview:selectAll'
-#   'cmd-z': 'webview:undo'
-#   'cmd-shift-z': 'webview:redo'
-#   'cmd-x': 'webview:cut'
-#   'cmd-c': 'webview:copy'
-#   'cmd-v': 'webview:paste'
-#
-# '.platform-win32 atom-web-view':
-#   'backspace': 'native!'
-#
-# '.platform-win32 atom-web-view webview':
-#   'ctrl-a': 'webview:selectAll'
-#   'ctrl-z': 'webview:undo'
-#   'ctrl-shift-z': 'webview:redo'
-#   'ctrl-x': 'webview:cut'
-#   'ctrl-c': 'webview:copy'
-#   'ctrl-v': 'webview:paste'
+    'ctrl-alt-i': 'Pane Browser: Open devtool'

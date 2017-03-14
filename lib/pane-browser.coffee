@@ -25,13 +25,23 @@ module.exports =
       'Pane Browser: Open': => @open()
       'Pane Browser: Open from clipboard': => @open null, {clipboard: true}
       'Pane Browser: Reset all state': => @resetAllState()
-    @subscription.add atom.commands.add '.atom-pane-browser__webview',
+    @subscription.add atom.commands.add 'atom-pane-browser',
       'Pane Browser: Reload': =>
-        el = document.activeElement
-        unless el.classList.contains 'atom-pane-browser__webview'
-          return
-        el.reload()
-    @subscription.add atom.commands.add '.atom-pane-browser__webview',
+          pane = atom.views.getView atom.workspace.getActivePane()
+          paneBrowser = pane.querySelector '.atom-pane-browser__webview'
+
+          if paneBrowser is null
+            return
+
+          paneBrowser.reload()
+      'Pane Browser: Open devtool': =>
+          pane = atom.views.getView atom.workspace.getActivePane()
+          paneBrowser = pane.querySelector '.atom-pane-browser__webview'
+
+          if paneBrowser is null
+            return
+
+          paneBrowser.openDevTools()
       'Pane Browser: Capture': => @capturePage 1
       'Pane Browser: Capture @2x': => @capturePage 2
       'Pane Browser: Capture @3x': => @capturePage 3
