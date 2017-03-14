@@ -181,7 +181,7 @@ module.exports = class PaneElement
   eventListener: ->
     removeEventListeners = []
 
-    handleDomReady = do =>
+    handleDidFinishLoad = do =>
       init = false
       =>
         if @error
@@ -224,8 +224,10 @@ module.exports = class PaneElement
           @webview.style.visibility = 'visible'
           init = true
 
-    @webview.addEventListener 'dom-ready', handleDomReady
-    removeEventListeners.push @webview.removeEventListener.bind @webview, 'dom-ready', handleDomReady
+        @error = false
+
+    @webview.addEventListener 'did-finish-load', handleDidFinishLoad
+    removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-finish-load', handleDidFinishLoad
 
     handleDidStartLoading = ->
       selector = '.pane.active #atom-pane-browser__webview-wrapper'
@@ -235,20 +237,17 @@ module.exports = class PaneElement
         NProgress.start()
     @webview.addEventListener 'did-start-loading', handleDidStartLoading
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-start-loading', handleDidStartLoading
+
     handleDidStopLoading = ->
       NProgress.done()
     @webview.addEventListener 'did-stop-loading', handleDidStopLoading
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-stop-loading', handleDidStopLoading
 
-    handleDidFinishLoad = =>
-      @error = false
-    @webview.addEventListener 'did-finish-load', handleDidFinishLoad
-    removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-finish-load', handleDidFinishLoad
-
-    handleDidFailLoad = ({errorCode, errorDescription}) =>
-      @error = true
-      @errorElementCode.innerText = errorCode
-      @errorElementDescription.innerText = errorDescription
+    handleDidFailLoad = ({isMainFrame, errorCode, errorDescription}) =>
+      if isMainFrame
+        @error = true
+        @errorElementCode.innerText = errorCode
+        @errorElementDescription.innerText = errorDescription
     @webview.addEventListener 'did-fail-load', handleDidFailLoad
     removeEventListeners.push @webview.removeEventListener.bind @webview, 'did-stop-loading', handleDidFailLoad
 
@@ -318,7 +317,7 @@ module.exports = class PaneElement
     @textEditor.deleteLine()
     try
       # 😡😡😡😡😡
-      if @state.url.startsWith 'file://'
+      if @state.url.startsWith 'file://' or @error
         return
       @textEditor.setText JSON.stringify @state
       @textEditor.save()
