@@ -1,6 +1,6 @@
 <h1><img src="https://github.com/nju33/atom-pane-browser/blob/master/images/icon_32x32@2x.png?raw=true" width="30">&nbsp;Pane Browser</h1>
 
-An Atom browser like a web browser
+🗿 An browser on Atom 
 
 ![Atom Pane Browser](https://raw.github.com/nju33/atom-pane-browser/master/screenshot.png)
 
@@ -21,11 +21,13 @@ apm install pane-browser
 'ctrl-alt-c': 'Pane Browser: Open from clipboard'
 
 # mac
-'.platform-darwin .atom-pane-browser__webview':
+'.platform-darwin atom-pane atom-pane-browser':
     'cmd-r': 'Pane Browser: Reload'
+    'cmd-alt-i': 'Pane Browser: Open devtool'
 # windows
-'.platform-windows .atom-pane-browser__webview':
+'.platform-windows atom-pane atom-pane-browser':
     'ctrl-r': 'Pane Browser: Reload'
+    'ctrl-alt-i': 'Pane Browser: Open devtool'
 ```
 
 ## Commands
@@ -37,13 +39,15 @@ apm install pane-browser
 - `Pane Browser: Reset all state`  
   Delete all holding state
 - `Pane Browser: Reload`
-  Reload the current page
+  Reload the current page on current browser
+- `Pane Browser: Open devtool`
+  Open devtool on current browser
 - `Pane Browser: Capture`  
-  Capture page
+  Capture page on current browser
 - `Pane Browser: Capture @2x`  
-  Capture page (width x2, height x2)
+  Capture page (width x2, height x2) on current browser
 - `Pane Browser: Capture @3x`  
-  Capture page (width x3, height x3)
+  Capture page (width x3, height x3) on current browser
 
 ## Scheme
 
