@@ -116,6 +116,9 @@ module.exports =
       filepath = path.join dirname, "#{Date.now()}.png"
       png = nativeImg.toPNG()
       fs.writeFile filepath, png
+      atom.notifications.addSuccess 'Captured',
+        detail: filepath
+        dismissable: true
 
   resetAllState: ->
     for i in [0..50]
