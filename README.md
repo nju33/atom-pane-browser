@@ -1,4 +1,4 @@
-# Atom Pane Browser
+<h1><img src="https://github.com/nju33/atom-pane-browser/blob/master/images/icon_32x32@2x.png?raw=true" width="30">&nbsp;Pane Browser</h1>
 
 An Atom browser like a web browser
 
