@@ -143,6 +143,7 @@ module.exports = class PaneElement
     Object.assign @webview.style,
       transform: "scale(#{scale})"
       transformOrigin: 'left top'
+      height: '100%'
     setTimeout =>
       Object.assign @webview.style,
         width: do =>
@@ -150,7 +151,8 @@ module.exports = class PaneElement
           rate * 100 + '%'
         height: do =>
           rate = @webviewWrapper.clientHeight / (@webview.clientHeight * scale)
-          rate * 100 + '%'
+          height$ = rate * 100 + '%'
+          "calc(#{height$} + 1px)"
     , 0
 
     @webviewWrapper.appendChild @webview
