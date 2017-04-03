@@ -8,6 +8,12 @@ Pane = require './pane'
 
 module.exports =
   config:
+    defaultScale:
+      type: 'number'
+      title: 'Default scale size'
+      default: 1.0
+      minimum: 0.1
+      maximum: 1.0
     minifyZoomLevel:
       type: 'number'
       title: 'Minify zoom level'

@@ -1,6 +1,6 @@
 <h1><img src="https://github.com/nju33/atom-pane-browser/blob/master/images/icon_32x32@2x.png?raw=true" width="30">&nbsp;Pane Browser</h1>
 
-🗿 An browser on Atom 
+🗿 An browser on Atom
 
 ![Atom Pane Browser](https://raw.github.com/nju33/atom-pane-browser/master/screenshot.png)
 
@@ -56,7 +56,10 @@ apm install pane-browser
 
 ## Options
 
-- `minify zoom level`, default: `0.7`  
+- `defaultScale` [default: `1.0`]  
+  Scale size in the state without doing anything.  
+  (In other words, the `transform: scale (n)` of `<webview/>`)
+- `minifyZoomLevel`, [default: `0.7`]  
   When the menu button is clicked, the page reduction ratio applied
 - `user agent`, default: `Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1`  
   When the menu button is clicked, the applied user agent

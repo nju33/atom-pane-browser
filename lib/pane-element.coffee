@@ -128,17 +128,32 @@ module.exports = class PaneElement
     @devtool
 
   createWebview: () ->
+    scale = atom.config.get 'pane-browser.defaultScale'
+
     @webviewWrapper = document.createElement 'div'
     @webviewWrapper.id = 'atom-pane-browser__webview-wrapper'
     @webviewWrapper.style.height = 'calc(100% - 38px)'
+
     @webview = document.createElement 'webview'
     @webview.className = 'atom-pane-browser__webview native-key-bindings'
     @webview.style.visibility = 'hidden'
     @webview.src = (@clipboard && @getClipboardTextAndAdjust @clipboard) ||
                    @state.url
-    @webview.style.height = '100%'
-    @webviewWrapper.appendChild @webview
 
+    Object.assign @webview.style,
+      transform: "scale(#{scale})"
+      transformOrigin: 'left top'
+    setTimeout =>
+      Object.assign @webview.style,
+        width: do =>
+          rate = @webviewWrapper.clientWidth / (@webview.clientWidth * scale)
+          rate * 100 + '%'
+        height: do =>
+          rate = @webviewWrapper.clientHeight / (@webview.clientHeight * scale)
+          rate * 100 + '%'
+    , 0
+
+    @webviewWrapper.appendChild @webview
     @webviewWrapper
 
   createErrorElement: ->
